@@ -1,0 +1,1 @@
+gardena ALL=(ALL) NOPASSWD: /usr/sbin/nvpmodel, /usr/bin/jetson_clocks

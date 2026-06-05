@@ -1,0 +1,43 @@
+From 4d18ebe28d88e771ab6f1e5f07138c61afee7b54 Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Thu, 9 Oct 2025 14:25:38 +0200
+Subject: [PATCH] nvidia/drivers/media/i2c/imx675.c: add exposure_offset
+ parameter
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ nvidia/drivers/media/i2c/imx675.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/nvidia/drivers/media/i2c/imx675.c b/nvidia/drivers/media/i2c/imx675.c
+index fe29c85ca508..fe82ea6e9935 100644
+--- a/nvidia/drivers/media/i2c/imx675.c
++++ b/nvidia/drivers/media/i2c/imx675.c
+@@ -34,6 +34,7 @@
+ #include <linux/moduleparam.h>
+ 
+ static uint exposure_factor = 100000;
++static uint exposure_offset = 0;
+ 
+ static const struct of_device_id imx675_of_match[] = {
+ 	{ .compatible = "nvidia,imx675", },
+@@ -259,6 +260,7 @@ static int imx675_set_exposure(struct tegracam_device *tc_dev, s64 val)
+ 	dev_dbg(dev, "%s: raw/unscaled val: %lld\n", __func__, val);
+ 	/* translate value (from normalized exposure) */
+ 	val = (((val * 1000000) / exposure_factor) * frame_line_length) / 1000000;
++	val -= exposure_offset;
+ 
+ 	if (val < IMX675_MIN_SHUTTER_SWEEP_TIME)
+ 		val = IMX675_MIN_SHUTTER_SWEEP_TIME;
+@@ -980,6 +982,8 @@ module_i2c_driver(imx675_i2c_driver);
+ 
+ module_param(exposure_factor, uint, 0644);
+ MODULE_PARM_DESC(exposure_factor, "An unsigned 32-bit exposure factor");
++module_param(exposure_offset, uint, 0644);
++MODULE_PARM_DESC(exposure_offset, "An unsigned 32-bit exposure offset");
+ 
+ MODULE_DESCRIPTION("Media Controller driver for Sony IMX675");
+ MODULE_AUTHOR("EEVE");
+-- 
+2.52.0
+

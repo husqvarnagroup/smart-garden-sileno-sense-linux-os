@@ -1,0 +1,52 @@
+From 6b4115af346c542fbf5bb326c69e7eb28d20e1af Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Thu, 23 Oct 2025 13:00:30 +0200
+Subject: [PATCH] nvidia/drivers/media/i2c/imx675.c: use shutter time in 1H
+ periods
+
+Interpret the exposure time in units of 1 H period.
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ nvidia/drivers/media/i2c/imx675.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/nvidia/drivers/media/i2c/imx675.c b/nvidia/drivers/media/i2c/imx675.c
+index a56882ec4cca..c608338d0558 100644
+--- a/nvidia/drivers/media/i2c/imx675.c
++++ b/nvidia/drivers/media/i2c/imx675.c
+@@ -17,7 +17,7 @@
+ #define IMX675_MAX_NUM_LINES_PER_FRAME 27500
+ #define IMX675_MIN_SHUTTER_SWEEP_TIME 0x0001
+ 
+-#define IMX675_CLOCK_FREQUENCY 74250000
++#define IMX675_CLOCK_FREQUENCY 24000000
+ 
+ /* imx675 sensor register address */
+ #define IMX675_GROUP_HOLD_ADDR 0x3001
+@@ -33,8 +33,8 @@
+ #include <linux/init.h>
+ #include <linux/moduleparam.h>
+ 
+-static uint exposure_factor = 100000;
+-static uint exposure_offset = 0;
++static uint exposure_factor = 1000000;
++static uint exposure_offset = 0; /* Not used */
+ 
+ static const struct of_device_id imx675_of_match[] = {
+ 	{ .compatible = "nvidia,imx675", },
+@@ -257,10 +257,7 @@ static int imx675_set_exposure(struct tegracam_device *tc_dev, s64 val)
+ 
+ 	dev_dbg(dev, "%s: custom exposure factor: %u\n", __func__, exposure_factor);
+ 	max_shutter_sweep_time = num_lines_per_frame - 4;
+-	dev_dbg(dev, "%s: raw/unscaled val: %lld\n", __func__, val);
+-	/* translate value (from normalized exposure) */
+-	val = (((val * 1000000) / exposure_factor) * num_lines_per_frame) / 1000000;
+-	val -= exposure_offset;
++	dev_dbg(dev, "%s: driver input val: %lld (in units of 1H)\n", __func__, val);
+ 
+ 	if (val < IMX675_MIN_SHUTTER_SWEEP_TIME)
+ 		val = IMX675_MIN_SHUTTER_SWEEP_TIME;
+-- 
+2.52.0
+

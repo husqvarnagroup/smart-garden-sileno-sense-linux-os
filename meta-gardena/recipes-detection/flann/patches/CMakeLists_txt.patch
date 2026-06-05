@@ -1,0 +1,34 @@
+--- flann-1.8.4-src.orig/CMakeLists.txt	2013-01-15 22:38:32.000000000 +0100
++++ flann-1.8.4-src/CMakeLists.txt	2017-11-23 23:38:25.000000000 +0100
+@@ -71,12 +71,12 @@ if (NOT PYTHON_EXECUTABLE)
+     set(BUILD_PYTHON_BINDINGS OFF)
+ endif()
+ 
+-find_hdf5()
+-if (NOT HDF5_FOUND)
+-	message(WARNING "hdf5 library not found, some tests will not be run")
+-else()
+-    include_directories(${HDF5_INCLUDE_DIR})
+-endif()
++#find_hdf5()
++#if (NOT HDF5_FOUND)
++#	message(WARNING "hdf5 library not found, some tests will not be run")
++#else()
++#    include_directories(${HDF5_INCLUDE_DIR})
++#endif()
+ 
+ if (USE_MPI OR HDF5_IS_PARALLEL)
+     find_package(MPI)
+@@ -155,9 +155,9 @@ endif(WIN32)
+ 
+ add_subdirectory( cmake )
+ add_subdirectory( src )
+-add_subdirectory( examples )
+-add_subdirectory( test )
+-add_subdirectory( doc )
++#add_subdirectory( examples )
++#add_subdirectory( test )
++#add_subdirectory( doc )
+ 
+ 
+ # CPACK options

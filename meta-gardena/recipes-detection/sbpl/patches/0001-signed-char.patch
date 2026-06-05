@@ -1,0 +1,33 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 99723df..883d603 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,7 +7,14 @@ set(SBPL_MINOR_VERSION 3)
+ set(SBPL_PATCH_VERSION 1)
+ set(SBPL_VERSION ${SBPL_MAJOR_VERSION}.${SBPL_MINOR_VERSION}.${SBPL_PATCH_VERSION})
+ 
+-set(CMAKE_BUILD_TYPE Release)
++if(CMAKE_BUILD_TYPE STREQUAL "Debug")
++    message("Debug buildje")
++    add_definitions(-DDEBUG=1)
++else()
++    add_definitions(-DDEBUG=0)
++endif()
++
++add_definitions(-fsigned-char)
+ 
+ include_directories(src/include)
+ 
+diff --git a/src/include/sbpl/config.h b/src/include/sbpl/config.h
+index 53f3564..9dedd2a 100644
+--- a/src/include/sbpl/config.h
++++ b/src/include/sbpl/config.h
+@@ -50,7 +50,7 @@
+ /**
+  * \brief regular debugging
+  */
+-#define DEBUG 0
++//#define DEBUG 1
+ 
+ /**
+  * \brief timing debugging

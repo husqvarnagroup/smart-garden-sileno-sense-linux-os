@@ -1,0 +1,11 @@
+[Unit]
+Description=Check if a recent upgrade has been performed
+After=multi-user.target
+Before=54.3_Vision-App.service
+
+[Service]
+Type=oneshot
+ExecStart=/hqv/scripts/check-system-upgrade.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,25 @@
+From 731bddec8440b700c83852d5b71ff1086e7d9c57 Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Wed, 26 Mar 2025 19:12:17 +0100
+Subject: [PATCH 1/3] configs/p3450-0002_defconfig: add squashfs support
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ configs/p3450-0002_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/p3450-0002_defconfig b/configs/p3450-0002_defconfig
+index 595d270b73..530eb841ee 100644
+--- a/configs/p3450-0002_defconfig
++++ b/configs/p3450-0002_defconfig
+@@ -28,6 +28,7 @@ CONFIG_CMD_USB_MASS_STORAGE=y
+ CONFIG_BOOTP_PREFER_SERVERIP=y
+ # CONFIG_CMD_NFS is not set
+ CONFIG_CMD_EXT4_WRITE=y
++CONFIG_CMD_SQUASHFS=y
+ CONFIG_OF_LIVE=y
+ CONFIG_ENV_OVERWRITE=y
+ CONFIG_ENV_IS_IN_MMC=y
+-- 
+2.34.1
+

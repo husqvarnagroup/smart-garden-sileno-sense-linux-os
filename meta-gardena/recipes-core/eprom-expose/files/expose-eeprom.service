@@ -1,0 +1,11 @@
+[Unit]
+Description=Expose camera EEPROM with user access
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/expose_eeprom.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

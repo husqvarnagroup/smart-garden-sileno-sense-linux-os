@@ -1,0 +1,37 @@
+export TOADI_PATH=/home/gardena/lib/
+export TOADI_PLUGIN_PATH=/home/gardena/lib/plugins/
+export TOADI_DATA_PATH=/home/gardena/data/
+export TOADI_RECORD_PATH=/home/gardena/data/recordings/
+export LD_LIBRARY_PATH=$TOADI_PATH:/usr/local/cuda-10.2/lib/:$LD_LIBRARY_PATH
+
+mkdir -p $TOADI_PATH
+mkdir -p $TOADI_PLUGIN_PATH
+mkdir -p $TOADI_DATA_PATH
+mkdir -p $TOADI_RECORD_PATH
+
+bindkey -e
+bindkey '^R' history-incremental-search-backward
+
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
+setopt inc_append_history
+setopt share_history
+
+autoload -Uz compinit
+compinit
+
+PROMPT='%n@%m %~ %# '
+
+alias ll='ls -la'
+
+# Bind ctrl+right arrow to move forward one word
+bindkey '^[[1;5C' forward-word
+
+# Bind ctrl+left arrow to move backward one word
+bindkey '^[[1;5D' backward-word
+
+# Bind ctrl+backspace to delete word
+bindkey '^[[3~' delete-char
+
+export PATH=/sbin:/usr/sbin/iw:$PATH

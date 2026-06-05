@@ -1,0 +1,11 @@
+--- ./include/NvJpegEncoder.h	2021-09-17 06:13:42.000000000 +0200
++++ ./include/NvJpegEncoder.h	2021-12-06 13:57:56.611873929 +0100
+@@ -57,7 +57,7 @@
+ #endif
+ 
+ #include <stdio.h>
+-#include "jpeglib.h"
++#include "libjpeg-8b/jpeglib.h"
+ #include "NvElement.h"
+ #include "NvBuffer.h"
+ 

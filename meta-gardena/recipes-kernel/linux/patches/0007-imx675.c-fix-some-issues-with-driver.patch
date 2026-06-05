@@ -1,0 +1,126 @@
+From cb5efa715209fd52851a90e200c564e8bfa611ca Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Mon, 6 Oct 2025 16:15:07 +0200
+Subject: [PATCH] imx675.c: fix some issues with driver
+
+- Always read VMAX register in set_exposure()
+- Don't use set_frame_rate(), it only makes things worse
+- Allow for lower shutter time diff (1 instead of 4)
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ nvidia/drivers/media/i2c/imx675.c | 47 +++++++++++++++++++++++++------
+ 1 file changed, 39 insertions(+), 8 deletions(-)
+
+diff --git a/nvidia/drivers/media/i2c/imx675.c b/nvidia/drivers/media/i2c/imx675.c
+index 5e2e82cea61d..fe29c85ca508 100644
+--- a/nvidia/drivers/media/i2c/imx675.c
++++ b/nvidia/drivers/media/i2c/imx675.c
+@@ -13,9 +13,9 @@
+ /* imx675 - sensor parameter limits */
+ #define IMX675_MIN_GAIN 0x0000
+ #define IMX675_MAX_GAIN 0x00f0
+-#define IMX675_MIN_FRAME_LINE_LENGTH 2200
++#define IMX675_MIN_FRAME_LINE_LENGTH 368
+ #define IMX675_MAX_FRAME_LINE_LENGTH 27500
+-#define IMX675_MIN_SHUTTER_SWEEP_TIME 0x0004
++#define IMX675_MIN_SHUTTER_SWEEP_TIME 0x0001
+ 
+ #define IMX675_CLOCK_FREQUENCY 74250000
+ 
+@@ -33,7 +33,7 @@
+ #include <linux/init.h>
+ #include <linux/moduleparam.h>
+ 
+-static uint exposure_factor = 1000000;
++static uint exposure_factor = 100000;
+ 
+ static const struct of_device_id imx675_of_match[] = {
+ 	{ .compatible = "nvidia,imx675", },
+@@ -104,6 +104,27 @@ static inline int imx675_read_reg(struct camera_common_data *s_data, u16 addr, u
+ 	return err;
+ }
+ 
++static inline int imx675_read_frame_line_length(struct camera_common_data *s_data, u32 *frame_line_length)
++{
++	int err;
++	u8 tmp;
++
++	err = imx675_read_reg(s_data, IMX675_FRAME_LINE_LENGTH_ADDR_LSB, &tmp);
++	if (err) {
++		return err;
++	}
++
++	*frame_line_length = tmp;
++	err = imx675_read_reg(s_data, IMX675_FRAME_LINE_LENGTH_ADDR_MSB, &tmp);
++	if (err) {
++		return err;
++	}
++
++	*frame_line_length |= (tmp << 8);
++
++	return 0;
++}
++
+ static inline int imx675_write_reg(struct camera_common_data *s_data, u16 addr, u8 val)
+ {
+ 	int err = 0;
+@@ -177,6 +198,7 @@ static int imx675_set_gain(struct tegracam_device *tc_dev, s64 val)
+ 
+ static int imx675_set_frame_rate(struct tegracam_device *tc_dev, s64 val)
+ {
++#if 0
+ 	struct camera_common_data *s_data = tc_dev->s_data;
+ 	struct imx675 *priv = (struct imx675 *)tc_dev->priv;
+ 	struct device *dev = tc_dev->dev;
+@@ -209,6 +231,7 @@ static int imx675_set_frame_rate(struct tegracam_device *tc_dev, s64 val)
+ 	}
+ 
+ 	priv->frame_line_length = frame_line_length;
++#endif
+ 
+ 	return 0;
+ }
+@@ -216,18 +239,26 @@ static int imx675_set_frame_rate(struct tegracam_device *tc_dev, s64 val)
+ static int imx675_set_exposure(struct tegracam_device *tc_dev, s64 val)
+ {
+ 	struct camera_common_data *s_data = tc_dev->s_data;
+-	struct imx675 *priv = (struct imx675 *)tc_dev->priv;
+ 	struct device *dev = tc_dev->dev;
+ 
+ 	int err = 0;
+ 	imx675_reg ct_regs[2];
+-	const s32 max_shutter_sweep_time = priv->frame_line_length - 4;
++	s32 max_shutter_sweep_time;
+ 	u32 shutter_sweep_time;
+ 	int i;
++	u32 frame_line_length;
+ 
+-	printk(KERN_ERR "%s: setting custom exposure factor: %u\n", __func__, exposure_factor);
++	err = imx675_read_frame_line_length(s_data, &frame_line_length);
++	if (err) {
++		dev_err(dev, "%s: read frame_line_length error\n", __func__);
++		return err;
++	}
++
++	dev_dbg(dev, "%s: custom exposure factor: %u\n", __func__, exposure_factor);
++	max_shutter_sweep_time = frame_line_length - 4;
++	dev_dbg(dev, "%s: raw/unscaled val: %lld\n", __func__, val);
+ 	/* translate value (from normalized exposure) */
+-	val = val / exposure_factor;
++	val = (((val * 1000000) / exposure_factor) * frame_line_length) / 1000000;
+ 
+ 	if (val < IMX675_MIN_SHUTTER_SWEEP_TIME)
+ 		val = IMX675_MIN_SHUTTER_SWEEP_TIME;
+@@ -236,7 +267,7 @@ static int imx675_set_exposure(struct tegracam_device *tc_dev, s64 val)
+ 		dev_info(dev, "%s: exposure limited by frame_line_length: %d\n", __func__, max_shutter_sweep_time);
+ 	}
+ 
+-	shutter_sweep_time = priv->frame_line_length - val;
++	shutter_sweep_time = frame_line_length - val;
+ 
+ 	dev_dbg(dev, "%s: val: %lld, shutter_sweep_time: %d\n", __func__, val, shutter_sweep_time);
+ 
+-- 
+2.52.0
+

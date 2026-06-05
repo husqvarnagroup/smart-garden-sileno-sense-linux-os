@@ -1,0 +1,1 @@
+gardena ALL=(advanced) NOPASSWD: /home/gardena/generic-resources/scripts/post-install-elevated.sh

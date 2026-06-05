@@ -1,0 +1,34 @@
+From 5dd43d4eafeb60115aa5d8b77f69ec61adf7e33e Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Wed, 22 Oct 2025 08:04:34 +0200
+Subject: [PATCH] configs/p3450-0002_defconfig: add bootcounter
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ configs/p3450-0002_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/configs/p3450-0002_defconfig b/configs/p3450-0002_defconfig
+index aa4fd2d3ec..814d52b9c8 100644
+--- a/configs/p3450-0002_defconfig
++++ b/configs/p3450-0002_defconfig
+@@ -5,6 +5,7 @@ CONFIG_SYS_MALLOC_LEN=0x2500000
+ CONFIG_NR_DRAM_BANKS=16
+ CONFIG_ENV_SIZE=0x30000
+ CONFIG_DEFAULT_DEVICE_TREE="tegra210-p3450-0000"
++CONFIG_BOOTCOUNT_BOOTLIMIT=2
+ CONFIG_TEGRA210=y
+ CONFIG_TARGET_P3450_0000=y
+ CONFIG_P3450_EMMC=y
+@@ -35,6 +36,8 @@ CONFIG_ENV_OVERWRITE=y
+ CONFIG_ENV_IS_IN_FAT=y
+ # CONFIG_ENV_IS_IN_MMC is not set
+ CONFIG_ENV_FAT_DEVICE_AND_PART="0:3"
++CONFIG_BOOTCOUNT_LIMIT=y
++CONFIG_BOOTCOUNT_ENV=y
+ CONFIG_DFU_MMC=y
+ CONFIG_DFU_RAM=y
+ CONFIG_DFU_SF=y
+-- 
+2.43.0
+

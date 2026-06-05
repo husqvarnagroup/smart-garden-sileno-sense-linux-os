@@ -1,0 +1,24 @@
+diff --git a/libs/q/include/q/type_traits/core.hpp b/libs/q/include/q/type_traits/core.hpp
+index eb55d17..f215c4e 100644
+--- a/libs/q/include/q/type_traits/core.hpp
++++ b/libs/q/include/q/type_traits/core.hpp
+@@ -22,6 +22,7 @@
+ #include <tuple>
+ #include <memory>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace q {
+ #define Q_FORWARD( value ) \
+diff --git a/progs/playground/main.cpp b/progs/playground/main.cpp
+index 211668f..af100f5 100644
+--- a/progs/playground/main.cpp
++++ b/progs/playground/main.cpp
+@@ -15,6 +15,7 @@
+ 
+ #include <string>
+ #include <iostream>
++#include <thread>
+ 
+ template< typename... Args >
+ void noop( Args&&... ) { }

@@ -1,0 +1,36 @@
+From e24b0cff8b6146b47edca175e0933f0f89eba0f5 Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Fri, 28 Mar 2025 20:07:58 +0100
+Subject: [PATCH 3/3] configs/p3450-0002_defconfig: set correct env partitions
+ and size
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ configs/p3450-0002_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configs/p3450-0002_defconfig b/configs/p3450-0002_defconfig
+index 88c94613a9..e6a5df91da 100644
+--- a/configs/p3450-0002_defconfig
++++ b/configs/p3450-0002_defconfig
+@@ -3,7 +3,7 @@ CONFIG_ARCH_TEGRA=y
+ CONFIG_SYS_TEXT_BASE=0x80080000
+ CONFIG_SYS_MALLOC_LEN=0x2500000
+ CONFIG_NR_DRAM_BANKS=16
+-CONFIG_ENV_SIZE=0x8000
++CONFIG_ENV_SIZE=0x30000
+ CONFIG_DEFAULT_DEVICE_TREE="tegra210-p3450-0000"
+ CONFIG_TEGRA210=y
+ CONFIG_TARGET_P3450_0000=y
+@@ -33,7 +33,7 @@ CONFIG_OF_LIVE=y
+ CONFIG_ENV_OVERWRITE=y
+ CONFIG_ENV_IS_IN_FAT=y
+ # CONFIG_ENV_IS_IN_MMC is not set
+-CONFIG_ENV_FAT_DEVICE_AND_PART="0:6"
++CONFIG_ENV_FAT_DEVICE_AND_PART="0:3"
+ CONFIG_DFU_MMC=y
+ CONFIG_DFU_RAM=y
+ CONFIG_DFU_SF=y
+-- 
+2.34.1
+

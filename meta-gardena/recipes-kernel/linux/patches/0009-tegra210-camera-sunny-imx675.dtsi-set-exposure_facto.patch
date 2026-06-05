@@ -1,0 +1,36 @@
+From 56f7ea91c24c6e72098756ce296f99f691d90a2d Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Fri, 3 Oct 2025 12:05:45 +0200
+Subject: [PATCH] tegra210-camera-sunny-imx675.dtsi: set exposure_factor =
+ 1000000
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ .../porg-platforms/tegra210-camera-sunny-imx675.dtsi          | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
+index 81d22e4e99e4..1b5532a2ac2d 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
+@@ -183,7 +183,7 @@
+ 
+ 					gain_factor = "1";
+ 					framerate_factor = "1000000";
+-					exposure_factor = "1";
++					exposure_factor = "1000000";
+ 					min_gain_val = "1"; /* 0dB */
+ 					max_gain_val = "240"; /* 72dB */
+ 					step_gain_val = "1"; /* 0.3dB */
+@@ -227,7 +227,7 @@
+ 
+ 					gain_factor = "1";
+ 					framerate_factor = "1000000";
+-					exposure_factor = "1";
++					exposure_factor = "1000000";
+ 					min_gain_val = "1"; /* 0dB */
+ 					max_gain_val = "240"; /* 72dB */
+ 					step_gain_val = "1"; /* 0.3dB */
+-- 
+2.52.0
+

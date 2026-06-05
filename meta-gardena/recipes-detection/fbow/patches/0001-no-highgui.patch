@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1c02bde..9eb3e8a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -269,8 +269,8 @@ target_link_libraries(fbow
+     PUBLIC
+         opencv_core
+     PRIVATE
+-        opencv_features2d
+-        opencv_highgui
++        opencv_features2d        
++        "$<$<BOOL:${BUILD_UTILS}>:opencv_highgui>"
+         "$<$<BOOL:${USE_CONTRIB}>:opencv_xfeatures2d>"
+ )
+ target_include_directories(fbow PUBLIC

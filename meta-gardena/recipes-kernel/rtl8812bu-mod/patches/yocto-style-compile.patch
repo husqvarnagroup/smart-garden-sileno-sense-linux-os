@@ -1,0 +1,21 @@
+diff --git a/Makefile b/Makefile
+index 66c88b0..3f38925 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2278,10 +2278,13 @@ endif
+ 
+ export CONFIG_RTL8822BU = m
+ 
+-all: modules
++SRC := $(shell pwd)
+ 
+-modules:
+-	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
++all:
++	$(MAKE) -C $(KERNEL_SRC) M=$(SRC)
++
++modules_install:
++	$(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules_install
+ 
+ strip:
+ 	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded

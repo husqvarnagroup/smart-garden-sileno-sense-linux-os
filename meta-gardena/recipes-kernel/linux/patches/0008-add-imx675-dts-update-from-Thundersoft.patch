@@ -1,0 +1,103 @@
+From 2cf1e486a8cb2ceac78d21c6bc977a474986dfe1 Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Tue, 23 Sep 2025 17:13:15 +0200
+Subject: [PATCH] add imx675 dts update from Thundersoft
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ .../tegra210-camera-sunny-imx675.dtsi         | 20 ++++++++++---------
+ .../tegra210-p3448-common-imx675.dts          |  2 +-
+ 2 files changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
+index d46ff8b08cfa..81d22e4e99e4 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
+@@ -166,7 +166,7 @@
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+-					discontinuous_clk = "yes";
++					discontinuous_clk = "no";
+ 					dpcm_enable = "false";
+ 					cil_settletime = "0";
+ 
+@@ -176,15 +176,16 @@
+ 					pixel_phase = "rggb";
+ 					csi_pixel_bit_depth = "12";
+ 					readout_orientation = "90";
+-					line_length = "1350";
++					line_length = "2608";
+ 					inherent_gain = "1";
++					mclk_multiplier = "100";
+ 					pix_clk_hz = "1188000000";
+ 
+ 					gain_factor = "1";
+ 					framerate_factor = "1000000";
+ 					exposure_factor = "1";
+-					min_gain_val = "0"; /* 0dB */
+-					max_gain_val = "496"; /* 72dB */
++					min_gain_val = "1"; /* 0dB */
++					max_gain_val = "240"; /* 72dB */
+ 					step_gain_val = "1"; /* 0.3dB */
+ 					default_gain = "3"; /* 1dB */
+ 					min_digital_gain_val = "0";
+@@ -202,14 +203,14 @@
+ 					step_exp_time = "1";
+ 					default_exp_time = "6";
+ 
+-					embedded_metadata_height = "0";
++					embedded_metadata_height = "1";
+ 				};
+ 				mode1 { /* IMX675_MODE_1296x972_25FPS */
+ 					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+-					discontinuous_clk = "yes";
++					discontinuous_clk = "no";
+ 					dpcm_enable = "false";
+ 					cil_settletime = "0";
+ 
+@@ -221,13 +222,14 @@
+ 					readout_orientation = "90";
+ 					line_length = "1350";
+ 					inherent_gain = "1";
++					mclk_multiplier = "100";
+ 					pix_clk_hz = "1188000000";
+ 
+ 					gain_factor = "1";
+ 					framerate_factor = "1000000";
+ 					exposure_factor = "1";
+-					min_gain_val = "0"; /* 0dB */
+-					max_gain_val = "496"; /* 72dB */
++					min_gain_val = "1"; /* 0dB */
++					max_gain_val = "240"; /* 72dB */
+ 					step_gain_val = "1"; /* 0.3dB */
+ 					default_gain = "3"; /* 1dB */
+ 					min_digital_gain_val = "0";
+@@ -245,7 +247,7 @@
+ 					step_exp_time = "1";
+ 					default_exp_time = "6";
+ 
+-					embedded_metadata_height = "0";
++					embedded_metadata_height = "1";
+ 				};
+ 
+ 				ports {
+diff --git a/nvidia/platform/t210/porg/kernel-dts/tegra210-p3448-common-imx675.dts b/nvidia/platform/t210/porg/kernel-dts/tegra210-p3448-common-imx675.dts
+index 9f007d56121e..2c0cb4324910 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/tegra210-p3448-common-imx675.dts
++++ b/nvidia/platform/t210/porg/kernel-dts/tegra210-p3448-common-imx675.dts
+@@ -114,7 +114,7 @@
+ 			min_bits_per_pixel = <10>;
+ 			vi_peak_byte_per_pixel = <2>;
+ 			vi_bw_margin_pct = <25>;
+-			max_pixel_rate = <240000>;
++			max_pixel_rate = <1188000>;
+ 			isp_peak_byte_per_pixel = <5>;
+ 			isp_bw_margin_pct = <25>;
+ 		};
+-- 
+2.52.0
+

@@ -1,0 +1,187 @@
+From bc3b39adfde56084ef0184177c5b6da34823244d Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Thu, 23 Oct 2025 12:44:29 +0200
+Subject: [PATCH] nvidia/drivers/media/i2c/imx675.c: rename to
+ num_lines_per_frame
+
+The frame_line_length variable is a misnomer since this is really
+num_lines_per_frame.
+
+Rename and adjust all these naming errors.
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ nvidia/drivers/media/i2c/imx675.c | 62 +++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 31 deletions(-)
+
+diff --git a/nvidia/drivers/media/i2c/imx675.c b/nvidia/drivers/media/i2c/imx675.c
+index fe82ea6e9935..a56882ec4cca 100644
+--- a/nvidia/drivers/media/i2c/imx675.c
++++ b/nvidia/drivers/media/i2c/imx675.c
+@@ -13,8 +13,8 @@
+ /* imx675 - sensor parameter limits */
+ #define IMX675_MIN_GAIN 0x0000
+ #define IMX675_MAX_GAIN 0x00f0
+-#define IMX675_MIN_FRAME_LINE_LENGTH 368
+-#define IMX675_MAX_FRAME_LINE_LENGTH 27500
++#define IMX675_MIN_NUM_LINES_PER_FRAME 368
++#define IMX675_MAX_NUM_LINES_PER_FRAME 27500
+ #define IMX675_MIN_SHUTTER_SWEEP_TIME 0x0001
+ 
+ #define IMX675_CLOCK_FREQUENCY 74250000
+@@ -23,8 +23,8 @@
+ #define IMX675_GROUP_HOLD_ADDR 0x3001
+ #define IMX675_GAIN_ADDR_LSB 0x3070
+ #define IMX675_CONVERSION_GAIN_ADDR 0x3030
+-#define IMX675_FRAME_LINE_LENGTH_ADDR_LSB 0x3028
+-#define IMX675_FRAME_LINE_LENGTH_ADDR_MSB 0x3029
++#define IMX675_VMAX_ADDR_LSB 0x3028
++#define IMX675_VMAX_ADDR_MSB 0x3029
+ #define IMX675_SHUTTER_SWEEP_TIME_ADDR_LSB 0x3050
+ #define IMX675_SHUTTER_SWEEP_TIME_ADDR_MSB 0x3051
+ 
+@@ -52,7 +52,7 @@ static const u32 ctrl_cid_list[] = {
+ struct imx675 {
+ 	struct i2c_client *i2c_client;
+ 	struct v4l2_subdev *subdev;
+-	u32 frame_line_length;
++	u32 num_lines_per_frame;
+ 	struct camera_common_data *s_data;
+ 	struct tegracam_device *tc_dev;
+ };
+@@ -64,12 +64,12 @@ static const struct regmap_config sensor_regmap_config = {
+ 	.use_single_rw = true,
+ };
+ 
+-static inline void imx675_get_frame_line_length_regs(imx675_reg *regs, u32 frame_line_length)
++static inline void imx675_get_frame_line_length_regs(imx675_reg *regs, u32 num_lines_per_frame)
+ {
+-	regs->addr = IMX675_FRAME_LINE_LENGTH_ADDR_LSB;
+-	regs->val = (frame_line_length) & 0xff;
+-	(regs + 1)->addr = IMX675_FRAME_LINE_LENGTH_ADDR_MSB;
+-	(regs + 1)->val = (frame_line_length >> 8) & 0xff;
++	regs->addr = IMX675_VMAX_ADDR_LSB;
++	regs->val = (num_lines_per_frame) & 0xff;
++	(regs + 1)->addr = IMX675_VMAX_ADDR_MSB;
++	(regs + 1)->val = (num_lines_per_frame >> 8) & 0xff;
+ }
+ 
+ static inline void imx675_get_shutter_sweep_time_regs(imx675_reg *regs, u32 shutter_sweep_time)
+@@ -105,23 +105,23 @@ static inline int imx675_read_reg(struct camera_common_data *s_data, u16 addr, u
+ 	return err;
+ }
+ 
+-static inline int imx675_read_frame_line_length(struct camera_common_data *s_data, u32 *frame_line_length)
++static inline int imx675_read_num_lines_per_frame(struct camera_common_data *s_data, u32 *num_lines_per_frame)
+ {
+ 	int err;
+ 	u8 tmp;
+ 
+-	err = imx675_read_reg(s_data, IMX675_FRAME_LINE_LENGTH_ADDR_LSB, &tmp);
++	err = imx675_read_reg(s_data, IMX675_VMAX_ADDR_LSB, &tmp);
+ 	if (err) {
+ 		return err;
+ 	}
+ 
+-	*frame_line_length = tmp;
+-	err = imx675_read_reg(s_data, IMX675_FRAME_LINE_LENGTH_ADDR_MSB, &tmp);
++	*num_lines_per_frame = tmp;
++	err = imx675_read_reg(s_data, IMX675_VMAX_ADDR_MSB, &tmp);
+ 	if (err) {
+ 		return err;
+ 	}
+ 
+-	*frame_line_length |= (tmp << 8);
++	*num_lines_per_frame |= (tmp << 8);
+ 
+ 	return 0;
+ }
+@@ -207,31 +207,31 @@ static int imx675_set_frame_rate(struct tegracam_device *tc_dev, s64 val)
+ 
+ 	int err = 0;
+ 	imx675_reg fl_regs[2];
+-	u32 frame_line_length = 0;
++	u32 num_lines_per_frame = 0;
+ 	int i;
+ 
+ 	if(mode->image_properties.line_length > 0 && val > 0) {
+-		frame_line_length = (u32)(IMX675_CLOCK_FREQUENCY *
++		num_lines_per_frame = (u32)(IMX675_CLOCK_FREQUENCY *
+ 			(u64)mode->control_properties.framerate_factor /
+ 			mode->image_properties.line_length / val);
+ 	}
+ 
+-	if (frame_line_length < IMX675_MIN_FRAME_LINE_LENGTH
+-		|| frame_line_length > IMX675_MAX_FRAME_LINE_LENGTH)
++	if (num_lines_per_frame < IMX675_MIN_NUM_LINES_PER_FRAME
++		|| num_lines_per_frame > IMX675_MAX_NUM_LINES_PER_FRAME)
+ 		return 0;
+ 
+-	dev_dbg(dev, "%s: val: %llde-6 [fps], frame_line_length: %u\n", __func__, val, frame_line_length);
++	dev_dbg(dev, "%s: val: %llde-6 [fps], num_lines_per_frame: %u\n", __func__, val, num_lines_per_frame);
+ 
+-	imx675_get_frame_line_length_regs(fl_regs, frame_line_length);
++	imx675_get_frame_line_length_regs(fl_regs, num_lines_per_frame);
+ 	for (i = 0; i < 2; i++) {
+ 		err = imx675_write_reg(s_data, fl_regs[i].addr, fl_regs[i].val);
+ 		if (err) {
+-			dev_err(dev, "%s: frame_line_length control error\n", __func__);
++			dev_err(dev, "%s: num_lines_per_frame control error\n", __func__);
+ 			return err;
+ 		}
+ 	}
+ 
+-	priv->frame_line_length = frame_line_length;
++	priv->num_lines_per_frame = num_lines_per_frame;
+ #endif
+ 
+ 	return 0;
+@@ -247,29 +247,29 @@ static int imx675_set_exposure(struct tegracam_device *tc_dev, s64 val)
+ 	s32 max_shutter_sweep_time;
+ 	u32 shutter_sweep_time;
+ 	int i;
+-	u32 frame_line_length;
++	u32 num_lines_per_frame;
+ 
+-	err = imx675_read_frame_line_length(s_data, &frame_line_length);
++	err = imx675_read_num_lines_per_frame(s_data, &num_lines_per_frame);
+ 	if (err) {
+-		dev_err(dev, "%s: read frame_line_length error\n", __func__);
++		dev_err(dev, "%s: read num_lines_per_frame error\n", __func__);
+ 		return err;
+ 	}
+ 
+ 	dev_dbg(dev, "%s: custom exposure factor: %u\n", __func__, exposure_factor);
+-	max_shutter_sweep_time = frame_line_length - 4;
++	max_shutter_sweep_time = num_lines_per_frame - 4;
+ 	dev_dbg(dev, "%s: raw/unscaled val: %lld\n", __func__, val);
+ 	/* translate value (from normalized exposure) */
+-	val = (((val * 1000000) / exposure_factor) * frame_line_length) / 1000000;
++	val = (((val * 1000000) / exposure_factor) * num_lines_per_frame) / 1000000;
+ 	val -= exposure_offset;
+ 
+ 	if (val < IMX675_MIN_SHUTTER_SWEEP_TIME)
+ 		val = IMX675_MIN_SHUTTER_SWEEP_TIME;
+ 	else if (val > max_shutter_sweep_time) {
+ 		val = max_shutter_sweep_time;
+-		dev_info(dev, "%s: exposure limited by frame_line_length: %d\n", __func__, max_shutter_sweep_time);
++		dev_info(dev, "%s: exposure limited by num_lines_per_frame: %d\n", __func__, max_shutter_sweep_time);
+ 	}
+ 
+-	shutter_sweep_time = frame_line_length - val;
++	shutter_sweep_time = num_lines_per_frame - val;
+ 
+ 	dev_dbg(dev, "%s: val: %lld, shutter_sweep_time: %d\n", __func__, val, shutter_sweep_time);
+ 
+@@ -887,7 +887,7 @@ static int imx675_probe(struct i2c_client *client,
+ 	priv->tc_dev = tc_dev;
+ 	priv->s_data = tc_dev->s_data;
+ 	priv->subdev = &tc_dev->s_data->subdev;
+-	priv->frame_line_length = IMX675_MIN_FRAME_LINE_LENGTH;
++	priv->num_lines_per_frame = IMX675_MIN_NUM_LINES_PER_FRAME;
+ 	tegracam_set_privdata(tc_dev, (void *)priv);
+ 
+ 	err = imx675_board_setup(priv);
+-- 
+2.52.0
+

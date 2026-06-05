@@ -1,0 +1,3 @@
+
+TEGRA_INITRD_BASEUTILS += "e2fsprogs"
+TEGRA_INITRD_BASEUTILS += "cryptsetup"
