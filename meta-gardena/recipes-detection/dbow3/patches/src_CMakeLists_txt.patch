@@ -1,0 +1,40 @@
+--- dbow3-6d7196653767af4d58745ce4ca36d768d0da731a.orig/src/CMakeLists.txt	2018-07-31 11:59:18.000000000 +0200
++++ dbow3-6d7196653767af4d58745ce4ca36d768d0da731a/src/CMakeLists.txt	2018-10-02 15:49:16.000000000 +0200
+@@ -21,6 +21,7 @@ SET_TARGET_PROPERTIES(${PROJECT_NAME} PR
+ TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${REQUIRED_LIBRARIES} )
+ 
+ INSTALL(TARGETS ${PROJECT_NAME}
++	EXPORT ${PROJECT_NAME}Targets
+ 	RUNTIME DESTINATION bin COMPONENT main			# Install the dll file in bin directory
+ 	LIBRARY DESTINATION ${LIB_INSTALL_DIR} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE COMPONENT main
+         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT main)			# Install the dll.a file in lib directory
+@@ -33,3 +34,29 @@ INSTALL(FILES ${hdrs_base}
+ 
+ 
+ 
++# ----------------------------------------------------------------------------
++# create configuration file from .in file
++# ----------------------------------------------------------------------------
++include(CMakePackageConfigHelpers)
++write_basic_package_version_file(
++    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++    VERSION ${PROJECT_SOVERSION}
++    COMPATIBILITY SameMajorVersion
++)
++
++set(export_project_name ${PROJECT_NAME})
++set(export_extra_lines "")
++configure_package_config_file(
++    "${CMAKE_SOURCE_DIR}/config.cmake.in"
++    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++    INSTALL_DESTINATION lib/cmake/${PROJECT_NAME}
++)
++
++install(EXPORT ${PROJECT_NAME}Targets
++    DESTINATION lib/cmake/${PROJECT_NAME}
++    NAMESPACE ${PROJECT_NAME}::
++)    
++
++install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++            "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++      DESTINATION lib/cmake/${PROJECT_NAME})

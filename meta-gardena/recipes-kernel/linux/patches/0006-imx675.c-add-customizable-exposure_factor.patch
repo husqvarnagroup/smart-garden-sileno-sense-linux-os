@@ -1,0 +1,60 @@
+From f752f66ce07394bf6560cdba82c40fdf3ae4b94c Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Thu, 2 Oct 2025 09:25:16 +0200
+Subject: [PATCH] imx675.c: add customizable exposure_factor
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ nvidia/drivers/media/i2c/imx675.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/nvidia/drivers/media/i2c/imx675.c b/nvidia/drivers/media/i2c/imx675.c
+index d7caa40c0f09..5e2e82cea61d 100644
+--- a/nvidia/drivers/media/i2c/imx675.c
++++ b/nvidia/drivers/media/i2c/imx675.c
+@@ -28,6 +28,13 @@
+ #define IMX675_SHUTTER_SWEEP_TIME_ADDR_LSB 0x3050
+ #define IMX675_SHUTTER_SWEEP_TIME_ADDR_MSB 0x3051
+ 
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/init.h>
++#include <linux/moduleparam.h>
++
++static uint exposure_factor = 1000000;
++
+ static const struct of_device_id imx675_of_match[] = {
+ 	{ .compatible = "nvidia,imx675", },
+ 	{ },
+@@ -211,7 +218,6 @@ static int imx675_set_exposure(struct tegracam_device *tc_dev, s64 val)
+ 	struct camera_common_data *s_data = tc_dev->s_data;
+ 	struct imx675 *priv = (struct imx675 *)tc_dev->priv;
+ 	struct device *dev = tc_dev->dev;
+-	const struct sensor_mode_properties *mode = &s_data->sensor_props.sensor_modes[s_data->mode_prop_idx];
+ 
+ 	int err = 0;
+ 	imx675_reg ct_regs[2];
+@@ -219,8 +225,9 @@ static int imx675_set_exposure(struct tegracam_device *tc_dev, s64 val)
+ 	u32 shutter_sweep_time;
+ 	int i;
+ 
++	printk(KERN_ERR "%s: setting custom exposure factor: %u\n", __func__, exposure_factor);
+ 	/* translate value (from normalized exposure) */
+-	val = val / mode->control_properties.exposure_factor;
++	val = val / exposure_factor;
+ 
+ 	if (val < IMX675_MIN_SHUTTER_SWEEP_TIME)
+ 		val = IMX675_MIN_SHUTTER_SWEEP_TIME;
+@@ -940,6 +947,9 @@ static struct i2c_driver imx675_i2c_driver = {
+ };
+ module_i2c_driver(imx675_i2c_driver);
+ 
++module_param(exposure_factor, uint, 0644);
++MODULE_PARM_DESC(exposure_factor, "An unsigned 32-bit exposure factor");
++
+ MODULE_DESCRIPTION("Media Controller driver for Sony IMX675");
+ MODULE_AUTHOR("EEVE");
+ MODULE_LICENSE("GPL v2");
+-- 
+2.52.0
+

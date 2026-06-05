@@ -1,0 +1,1 @@
+sudo fw_setenv $1 $2

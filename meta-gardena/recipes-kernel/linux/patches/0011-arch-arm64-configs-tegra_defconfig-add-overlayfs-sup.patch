@@ -1,0 +1,26 @@
+From bafdb1938bc928efc0bfddc64f3270705d6f6fce Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Fri, 28 Mar 2025 21:40:07 +0100
+Subject: [PATCH] arch/arm64/configs/tegra_defconfig: add overlayfs support
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ arch/arm64/configs/tegra_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/configs/tegra_defconfig b/arch/arm64/configs/tegra_defconfig
+index 8ab7fb986833..55076fe68c0e 100644
+--- a/arch/arm64/configs/tegra_defconfig
++++ b/arch/arm64/configs/tegra_defconfig
+@@ -1108,7 +1108,7 @@ CONFIG_QFMT_V2=y
+ CONFIG_AUTOFS4_FS=y
+ CONFIG_FUSE_FS=m
+ CONFIG_CUSE=m
+-CONFIG_OVERLAY_FS=m
++CONFIG_OVERLAY_FS=y
+ CONFIG_VFAT_FS=y
+ CONFIG_NTFS_FS=y
+ CONFIG_NTFS_RW=y
+-- 
+2.52.0
+

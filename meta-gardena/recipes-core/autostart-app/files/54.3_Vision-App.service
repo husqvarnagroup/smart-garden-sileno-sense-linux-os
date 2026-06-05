@@ -1,0 +1,24 @@
+[Unit]
+Description=Run Vision App headlessly as user gardena
+After=multi-user.target expose-eeprom.service
+Requires=expose-eeprom.service
+OnFailure=54.103_Vision-Boot.service
+Conflicts=54.103_Vision-Boot.service
+Before=54.103_Vision-Boot.service
+
+[Service]
+Type=simple
+User=gardena
+Group=gardena
+WorkingDirectory=/home/gardena/54.3_Vision-App
+ExecStart=/home/gardena/54.3_Vision-App/54.3_Vision-App.AppImage
+EnvironmentFile=-/home/gardena/54.3_Vision-App/_FSMower/54.3_Vision-App.env
+ExecStartPre=/bin/sh -c 'for i in $(seq 1 20); do [ -e /dev/video0 ] && exit 0; sleep 1; done; echo "Timed out waiting for /dev/video0" >&2; exit 0'
+Restart=always
+RestartSec=3
+StartLimitInterval=60
+StartLimitBurst=3
+AmbientCapabilities=CAP_SYS_TIME CAP_SYS_NICE
+
+[Install]
+WantedBy=multi-user.target

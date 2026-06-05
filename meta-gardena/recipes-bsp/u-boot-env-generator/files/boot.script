@@ -1,0 +1,67 @@
+devnum=0
+devtype=mmc
+
+part number mmc ${devnum} UDA uda_part_number
+
+if test ${fallback} -eq 1; then
+	if test ${mmcpartition} -eq 5; then
+		setenv mmcpartition 4
+	else
+		setenv mmcpartition 5
+	fi
+	echo "Fallback boot: Switching mmcpartition to ${mmcpartition}"
+	setenv bootcount
+	saveenv
+fi
+
+if test ${mmcpartition} -eq 5; then
+	setenv distro_bootpart 2
+	verity_part_name=APP-1-verity
+else
+	setenv distro_bootpart 1
+	verity_part_name=APP-0-verity
+fi
+
+part number mmc ${devnum} ${verity_part_name} verity_part_number
+
+setenv cbootargs_bak "${cbootargs}"
+setenv cbootargs "${cbootargs} root_part_num=${distro_bootpart} uda_part_num=${uda_part_number} boot_part_number=${boot_part_number} verity_part_number=${verity_part_number}"
+
+echo Scanning ${devtype} ${devnum}:${distro_bootpart}...
+for prefix in ${boot_prefixes}; do
+	if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${boot_syslinux_conf}; then
+		echo Found ${prefix}${boot_syslinux_conf}
+		sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}${boot_syslinux_conf}
+	fi
+done
+
+echo Failed boot from ${devnum}:${distro_bootpart}. Switching boot partition
+
+if test ${mmcpartition} -eq 5; then
+	setenv mmcpartition 4
+else
+	setenv mmcpartition 5
+fi
+
+# Restore environment
+setenv cbootargs ${cbootargs_bak}
+env delete distro_bootpart
+env delete cbootargs_bak
+saveenv
+
+if test ${mmcpartition} -eq 5; then
+	setenv distro_bootpart 2
+else
+	setenv distro_bootpart 1
+fi
+
+# Update cbootargs with the new partition
+setenv cbootargs "${cbootargs} root_part_num=${distro_bootpart} uda_part_num=${uda_part_number} boot_part_number=${boot_part_number} verity_part_number=${verity_part_number}"
+
+echo Scanning ${devtype} ${devnum}:${distro_bootpart}...
+for prefix in ${boot_prefixes}; do
+	if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${boot_syslinux_conf}; then
+		echo Found ${prefix}${boot_syslinux_conf}
+		sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}${boot_syslinux_conf}
+	fi
+done

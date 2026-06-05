@@ -1,0 +1,417 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 883d603..613a22f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,6 +7,9 @@ set(SBPL_MINOR_VERSION 3)
+ set(SBPL_PATCH_VERSION 1)
+ set(SBPL_VERSION ${SBPL_MAJOR_VERSION}.${SBPL_MINOR_VERSION}.${SBPL_PATCH_VERSION})
+ 
++set(CMAKE_CXX_STANDARD 20)
++set(CMAKE_CXX_STANDARD_REQUIRED ON)
++
+ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+     message("Debug buildje")
+     add_definitions(-DDEBUG=1)
+@@ -19,21 +22,21 @@ add_definitions(-fsigned-char)
+ include_directories(src/include)
+ 
+ add_library(sbpl SHARED
+-  src/discrete_space_information/environment_nav2D.cpp
++#  src/discrete_space_information/environment_nav2D.cpp
+   src/discrete_space_information/environment_navxythetalat.cpp
+-  src/discrete_space_information/environment_navxythetamlevlat.cpp
+-  src/discrete_space_information/environment_nav2Duu.cpp
+-  src/discrete_space_information/environment_XXX.cpp
+-  src/discrete_space_information/environment_robarm.cpp
+-  src/heuristics/embedded_heuristic.cpp
+-  src/planners/adplanner.cpp
+-  src/planners/ANAplanner.cpp
++#  src/discrete_space_information/environment_navxythetamlevlat.cpp
++#  src/discrete_space_information/environment_nav2Duu.cpp
++#  src/discrete_space_information/environment_XXX.cpp
++#  src/discrete_space_information/environment_robarm.cpp
++#  src/heuristics/embedded_heuristic.cpp
++#  src/planners/adplanner.cpp
++#  src/planners/ANAplanner.cpp
+   src/planners/araplanner.cpp
+-  src/planners/lazyARA.cpp
+-  src/planners/mhaplanner.cpp
+-  src/planners/ppcpplanner.cpp
+-  src/planners/rstarplanner.cpp
+-  src/planners/viplanner.cpp
++#  src/planners/lazyARA.cpp
++#  src/planners/mhaplanner.cpp
++#  src/planners/ppcpplanner.cpp
++#  src/planners/rstarplanner.cpp
++#  src/planners/viplanner.cpp
+   src/utils/heap.cpp
+   src/utils/mdp.cpp
+   src/utils/utils.cpp
+@@ -80,8 +83,8 @@ install(DIRECTORY src/include/sbpl DESTINATION include
+ install(TARGETS sbpl
+ 	LIBRARY DESTINATION lib)
+ 
+-add_executable(test_sbpl src/test/main.cpp)
+-target_link_libraries(test_sbpl sbpl)
++#add_executable(test_sbpl src/test/main.cpp)
++#target_link_libraries(test_sbpl sbpl)
+ 
+-add_executable(test_adjacency_list src/test/test_adjacency_list.cpp)
+-target_link_libraries(test_adjacency_list sbpl)
++#add_executable(test_adjacency_list src/test/test_adjacency_list.cpp)
++#target_link_libraries(test_adjacency_list sbpl)
+diff --git a/src/discrete_space_information/environment_navxythetalat.cpp b/src/discrete_space_information/environment_navxythetalat.cpp
+index d4f6533..cb844c9 100644
+--- a/src/discrete_space_information/environment_navxythetalat.cpp
++++ b/src/discrete_space_information/environment_navxythetalat.cpp
+@@ -2693,11 +2693,10 @@ EnvironmentNAVXYTHETALAT::CreateNewHashEntry_lookup(int X, int Y, int Theta)
+     Coord2StateIDHashTable_lookup[index] = HashEntry;
+ 
+     // insert into and initialize the mappings
+-    int* entry = new int[NUMOFINDICES_STATEID2IND];
+-    StateID2IndexMapping.push_back(entry);
+-    for (i = 0; i < NUMOFINDICES_STATEID2IND; i++) {
+-        StateID2IndexMapping[HashEntry->stateID][i] = -1;
+-    }
++    StateID2IndexMapping.push_back({-1});
++    // for (i = 0; i < NUMOFINDICES_STATEID2IND; i++) {
++    //     StateID2IndexMapping[HashEntry->stateID][i] = -1;
++    // }
+ 
+     if (HashEntry->stateID != (int)StateID2IndexMapping.size() - 1) {
+         throw SBPL_Exception("ERROR in Env... function: last state has incorrect stateID");
+@@ -2738,11 +2737,10 @@ EnvironmentNAVXYTHETALAT::CreateNewHashEntry_hash(int X, int Y, int Theta)
+     Coord2StateIDHashTable[i].push_back(HashEntry);
+ 
+     // insert into and initialize the mappings
+-    int* entry = new int[NUMOFINDICES_STATEID2IND];
+-    StateID2IndexMapping.push_back(entry);
+-    for (i = 0; i < NUMOFINDICES_STATEID2IND; i++) {
+-        StateID2IndexMapping[HashEntry->stateID][i] = -1;
+-    }
++    StateID2IndexMapping.push_back({-1});
++    // for (i = 0; i < NUMOFINDICES_STATEID2IND; i++) {
++    //     StateID2IndexMapping[HashEntry->stateID][i] = -1;
++    // }
+ 
+     if (HashEntry->stateID != (int)StateID2IndexMapping.size() - 1) {
+         throw SBPL_Exception("ERROR in Env... function: last state has incorrect stateID");
+diff --git a/src/include/sbpl/discrete_space_information/environment.h b/src/include/sbpl/discrete_space_information/environment.h
+index 018e284..f36cd64 100644
+--- a/src/include/sbpl/discrete_space_information/environment.h
++++ b/src/include/sbpl/discrete_space_information/environment.h
+@@ -32,6 +32,8 @@
+ 
+ #include <cstdio>
+ #include <vector>
++#include <array>
++
+ #include <sbpl/config.h>
+ #include <sbpl/sbpl_exception.h>
+ 
+@@ -62,7 +64,7 @@ public:
+      * is mapped onto search index = 5 in search 0 The value of -1 means that
+      * no search state has been created yet for this hashentry
+      */
+-    std::vector<int*> StateID2IndexMapping;
++    std::vector<std::array<int,1>> StateID2IndexMapping;
+ 
+     /**
+      * \brief debugging file
+@@ -273,9 +275,9 @@ public:
+     virtual ~DiscreteSpaceInformation()
+     {
+         SBPL_PRINTF("destroying discretespaceinformation\n");
+-        for (unsigned int i = 0; i < StateID2IndexMapping.size(); ++i) {
+-            if (StateID2IndexMapping[i] != NULL) delete[] StateID2IndexMapping[i];
+-        }
++        // for (unsigned int i = 0; i < StateID2IndexMapping.size(); ++i) {
++        //     if (StateID2IndexMapping[i] != NULL) delete[] StateID2IndexMapping[i];
++        // }
+         SBPL_FCLOSE(fDeb);
+     }
+ 
+diff --git a/src/include/sbpl/planners/araplanner.h b/src/include/sbpl/planners/araplanner.h
+index 461f74a..715f071 100644
+--- a/src/include/sbpl/planners/araplanner.h
++++ b/src/include/sbpl/planners/araplanner.h
+@@ -58,6 +58,7 @@ class StateChangeQuery;
+ /**
+  * \brief state structure used in ARA* search tree
+  */
++
+ typedef class ARASEARCHSTATEDATA : public AbstractSearchState
+ {
+ public:
+@@ -270,6 +271,11 @@ public:
+      */
+     virtual void get_search_stats(std::vector<PlannerStats>* s);
+ 
++     void set_max_allowed_memory(size_t m);
++
+ protected:
+     //member variables
+     double finitial_eps, finitial_eps_planning_time, final_eps_planning_time, final_eps, dec_eps, final_epsilon;
+@@ -290,6 +296,10 @@ protected:
+ 
+     unsigned int searchexpands;
+     int MaxMemoryCounter;
++    // allow to set the max memory for the search
++    int max_allowed_memory;
++    int nbr_of_plannings;
++    
+     clock_t TimeStarted;
+     FILE *fDeb;
+ 
+diff --git a/src/include/sbpl/utils/mdp.h b/src/include/sbpl/utils/mdp.h
+index 98812aa..893d0a0 100644
+--- a/src/include/sbpl/utils/mdp.h
++++ b/src/include/sbpl/utils/mdp.h
+@@ -65,7 +65,7 @@ public:
+         if (PlannerSpecificData != NULL) {
+             const char* msg = "ERROR: state deletion: planner specific data is not deleted";
+             SBPL_FPRINTF(stderr, "%s\n", msg);
+-            throw SBPL_Exception(msg);
++            //throw SBPL_Exception(msg);
+         }
+     }
+ 
+@@ -102,7 +102,7 @@ public:
+         if (PlannerSpecificData != NULL) {
+             const char* msg = "ERROR: state deletion: planner specific data is not deleted";
+             SBPL_FPRINTF(stderr, "%s\n", msg);
+-            throw SBPL_Exception(msg);
++            //throw SBPL_Exception(msg);
+         }
+     }
+ 
+diff --git a/src/planners/araplanner.cpp b/src/planners/araplanner.cpp
+index c63fd31..661bd0d 100644
+--- a/src/planners/araplanner.cpp
++++ b/src/planners/araplanner.cpp
+@@ -40,8 +40,30 @@
+ #include <sbpl/utils/key.h>
+ #include <sbpl/utils/list.h>
+ 
++// #include <mach/mach.h>
++// #include <iostream>
++
+ using namespace std;
+ 
++namespace {
++void printMacOsMemoryInfo()
++{
++    // struct task_basic_info t_info;
++    // mach_msg_type_number_t t_info_count = TASK_BASIC_INFO_COUNT;
++
++    // if (KERN_SUCCESS != task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&t_info, &t_info_count)) {
++    //     return;
++    // }
++
++    // struct task_vm_info k_info;
++    // mach_msg_type_number_t k_info_count = TASK_VM_INFO_COUNT;
++    // if (KERN_SUCCESS != task_info(mach_task_self(), TASK_VM_INFO, (task_info_t)&k_info, &k_info_count)) {
++    //     return;
++    // }
++
++    // std::cout << "Memory footprint: " << (k_info.phys_footprint / 1024) << "\n";
++}
++}
+ ARAPlanner::ARAPlanner(DiscreteSpaceInformation* environment, bool bSearchForward)
+ {
+     bforwardsearch = bSearchForward;
+@@ -56,7 +78,11 @@ ARAPlanner::ARAPlanner(DiscreteSpaceInformation* environment, bool bSearchForwar
+     repair_time = INFINITECOST;
+     searchexpands = 0;
+     MaxMemoryCounter = 0;
++    // allow infinite mem by default
++    max_allowed_memory = 0;
++    nbr_of_plannings = 0;
+ 
++    printMacOsMemoryInfo();
+ #ifndef ROS
+     const char* debug = "debug.txt";
+ #endif
+@@ -82,6 +108,8 @@ ARAPlanner::ARAPlanner(DiscreteSpaceInformation* environment, bool bSearchForwar
+     final_eps_planning_time = -1.0;
+     num_of_expands_initial_solution = 0;
+     final_eps = -1.0;
++
++    printMacOsMemoryInfo();
+ }
+ 
+ ARAPlanner::~ARAPlanner()
+@@ -137,16 +165,28 @@ CMDPSTATE* ARAPlanner::CreateState(int stateID, ARASearchStateSpace_t* pSearchSt
+ 
+ CMDPSTATE* ARAPlanner::GetState(int stateID, ARASearchStateSpace_t* pSearchStateSpace)
+ {
+-    if (stateID >= (int)environment_->StateID2IndexMapping.size()) {
++    auto idxMappingSize = (int)environment_->StateID2IndexMapping.size();
++    if (stateID >= idxMappingSize) {
+         std::stringstream ss("ERROR int GetState: stateID ");
+         ss << stateID << " is invalid";
+         throw SBPL_Exception(ss.str());
+     }
+ 
+-    if (environment_->StateID2IndexMapping[stateID][ARAMDP_STATEID2IND] == -1)
+-        return CreateState(stateID, pSearchStateSpace);
+-    else
++    if (environment_->StateID2IndexMapping[stateID][ARAMDP_STATEID2IND] == -1) {
++        // early stop when maximum memory limit is reached
++        CMDPSTATE* createdState = CreateState(stateID, pSearchStateSpace);
++        auto totalMaxMemory = (MaxMemoryCounter + (idxMappingSize * sizeof(int)));
++        if(max_allowed_memory > 0 && totalMaxMemory > max_allowed_memory) {
++            std::stringstream ss("ERROR: Max allowed memory limit reached during planning: ");
++            ss << totalMaxMemory;
++            printMacOsMemoryInfo();
++            force_planning_from_scratch_and_free_memory();
++            throw SBPL_Exception(ss.str());
++        }
++        return createdState;
++    } else {
+         return pSearchStateSpace->searchMDP.StateArray[environment_->StateID2IndexMapping[stateID][ARAMDP_STATEID2IND]];
++    }
+ }
+ 
+ //-----------------------------------------------------------------------------------------------------
+@@ -907,25 +947,32 @@ bool ARAPlanner::Search(ARASearchStateSpace_t* pSearchStateSpace, vector<int>& p
+     SBPL_FPRINTF(fDeb, "new search call (call number=%d)\n", pSearchStateSpace->callnumber);
+ #endif
+ 
++    printMacOsMemoryInfo();
++
+     if (pSearchStateSpace->bReevaluatefvals) {
+         // costs have changed or a new goal has been set
+         environment_->EnsureHeuristicsUpdated(bforwardsearch);
+         Reevaluatehvals(pSearchStateSpace);
+     }
+ 
++    printMacOsMemoryInfo();
++
+     if (pSearchStateSpace->bReinitializeSearchStateSpace) {
+         //re-initialize state space
+         ReInitializeSearchStateSpace(pSearchStateSpace);
+     }
+ 
++    printMacOsMemoryInfo();
++
+     if (bOptimalSolution) {
+         pSearchStateSpace->eps = 1;
+         MaxNumofSecs = INFINITECOST;
+         repair_time = INFINITECOST;
+     }
+     else if (bFirstSolution) {
+-        MaxNumofSecs = INFINITECOST;
+-        repair_time = INFINITECOST;
++        // Keep obeying the time limit
++        //MaxNumofSecs = INFINITECOST;
++        //repair_time = INFINITECOST;
+     }
+ 
+     //the main loop of ARA*
+@@ -1010,9 +1057,13 @@ bool ARAPlanner::Search(ARASearchStateSpace_t* pSearchStateSpace, vector<int>& p
+ #endif
+ 
+     PathCost = ((ARAState*)pSearchStateSpace->searchgoalstate->PlannerSpecificData)->g;
+-    MaxMemoryCounter += environment_->StateID2IndexMapping.size() * sizeof(int);
+ 
+-    SBPL_PRINTF("MaxMemoryCounter = %d\n", MaxMemoryCounter);
++    // not correct counting because the statemapping vector never is cleared
++    //MaxMemoryCounter += environment_->StateID2IndexMapping.size() * sizeof(int);
++
++    SBPL_PRINTF("MaxMemoryCounter = %d   stateid2indexmapping size = %d\n", MaxMemoryCounter, environment_->StateID2IndexMapping.size());
++
++    //printf("MaxMemoryCounter = %d   stateid2indexmapping size = %lu\n", MaxMemoryCounter, environment_->StateID2IndexMapping.size());
+ 
+     int solcost = INFINITECOST;
+     bool ret = false;
+@@ -1072,6 +1123,18 @@ int ARAPlanner::replan(double allocated_time_secs, vector<int>* solution_stateID
+     bool bOptimalSolution = false;
+     *psolcost = 0;
+ 
++    if(nbr_of_plannings > 0 && MaxMemoryCounter > 0) {
++        std::ostringstream ossLog;
++        int memoryPerPlanning = MaxMemoryCounter / nbr_of_plannings;
++        if(MaxMemoryCounter + (memoryPerPlanning * 2) >= max_allowed_memory) {
++            ossLog << "Need to free memory for next planning, mem per planning " << memoryPerPlanning << " plannings " << nbr_of_plannings <<  "\n";
++            force_planning_from_scratch_and_free_memory();
++        } else {
++            ossLog << "Enough memory for next planning " << memoryPerPlanning << " plannings " << nbr_of_plannings <<  "\n";
++        }
++        SBPL_PRINTF(ossLog.str().data());
++    }
++    ++nbr_of_plannings;
+     SBPL_PRINTF("planner: replan called (bFirstSol=%d, bOptSol=%d)\n", bFirstSolution, bOptimalSolution);
+ 
+     //plan
+@@ -1154,6 +1217,7 @@ int ARAPlanner::force_planning_from_scratch()
+ int ARAPlanner::force_planning_from_scratch_and_free_memory()
+ {
+     SBPL_PRINTF("planner: forceplanfromscratch set\n");
++    nbr_of_plannings = 0;
+     int start_id = -1;
+     int goal_id = -1;
+     if (pSearchStateSpace_->searchstartstate)
+@@ -1170,9 +1234,11 @@ int ARAPlanner::force_planning_from_scratch_and_free_memory()
+     DeleteSearchStateSpace(pSearchStateSpace_);
+     CreateSearchStateSpace(pSearchStateSpace_);
+     InitializeSearchStateSpace(pSearchStateSpace_);
+-    for (unsigned int i = 0; i < environment_->StateID2IndexMapping.size(); i++)
+-        for (int j = 0; j < NUMOFINDICES_STATEID2IND; j++)
+-            environment_->StateID2IndexMapping[i][j] = -1;
++    for (unsigned int i = 0; i < environment_->StateID2IndexMapping.size(); i++) {
++        //for (int j = 0; j < NUMOFINDICES_STATEID2IND; j++)
++            //environment_->StateID2IndexMapping[i][j] = -1;
++            environment_->StateID2IndexMapping[i][0] = -1;
++    }
+ 
+     if (start_id >= 0)
+         set_start(start_id);
+@@ -1284,3 +1350,8 @@ void ARAPlanner::get_search_stats(vector<PlannerStats>* s)
+         s->push_back(stats[i]);
+     }
+ }
++
++void ARAPlanner::set_max_allowed_memory(size_t m) {
++    max_allowed_memory = m;
++}
+diff --git a/src/utils/heap.cpp b/src/utils/heap.cpp
+index d064434..8cf8daf 100644
+--- a/src/utils/heap.cpp
++++ b/src/utils/heap.cpp
+@@ -160,7 +160,7 @@ void CHeap::growheap()
+ 
+     SBPL_PRINTF("growing heap size from %d ", allocated);
+ 
+-    allocated = 2 * allocated;
++    allocated += 20000;
+     if (allocated > HEAPSIZE) allocated = HEAPSIZE;
+ 
+     SBPL_PRINTF("to %d\n", allocated);
+@@ -192,7 +192,7 @@ void CHeap::insertheap(AbstractSearchState *AbstractSearchState, CKey key)
+     sizecheck();
+ 
+     if (AbstractSearchState->heapindex != 0) {
+-        sprintf(strTemp, "insertheap: AbstractSearchState is already in heap");
++        snprintf(strTemp, 100, "insertheap: AbstractSearchState is already in heap");
+         heaperror(strTemp);
+     }
+     tmp.heapstate = AbstractSearchState;
+@@ -224,7 +224,7 @@ void CHeap::insert_unsafe(AbstractSearchState* AbstractSearchState, CKey key)
+     sizecheck();
+ 
+     if (AbstractSearchState->heapindex != 0) {
+-        sprintf(strTemp, "insertheap: AbstractSearchState is already in heap");
++        snprintf(strTemp, 100, "insertheap: AbstractSearchState is already in heap");
+         heaperror(strTemp);
+     }
+     tmp.heapstate = AbstractSearchState;
+@@ -450,7 +450,7 @@ void CIntHeap::insertheap(AbstractSearchState *AbstractSearchState, int key)
+     sizecheck();
+ 
+     if (AbstractSearchState->heapindex != 0) {
+-        sprintf(strTemp, "insertheap: AbstractSearchState is already in heap");
++        snprintf(strTemp, 100, "insertheap: AbstractSearchState is already in heap");
+         heaperror(strTemp);
+     }
+     tmp.heapstate = AbstractSearchState;

@@ -1,0 +1,487 @@
+From 39acddc709e53a9c4173177f6eb739ef89baacbe Mon Sep 17 00:00:00 2001
+From: invalid_git config <unknown@unknown>
+Date: Tue, 24 Jun 2025 13:51:28 +0000
+Subject: [PATCH] Disable Jetson Nano's MCLK
+
+---
+ .../tegra210-camera-rbpcv2-dual-imx219.dtsi   | 24 +++++++++----------
+ .../tegra210-camera-rbpcv2-imx219.dtsi        | 12 +++++-----
+ .../tegra210-camera-rbpcv3-dual-imx477.dtsi   |  8 +++----
+ .../tegra210-camera-rbpcv3-imx477.dtsi        |  4 ++--
+ .../tegra210-camera-sunny-imx675.dtsi         |  4 ++--
+ .../tegra210-porg-pinmux-p3448-0000-a00.dtsi  | 12 +++++-----
+ .../tegra210-porg-pinmux-p3448-0000-a01.dtsi  | 10 ++++----
+ .../tegra210-porg-pinmux-p3448-0000-a02.dtsi  | 14 +++++------
+ .../tegra210-porg-pinmux-p3448-0000-b00.dtsi  | 14 +++++------
+ .../tegra210-porg-pinmux-p3448-0002-a02.dtsi  | 10 ++++----
+ .../tegra210-porg-pinmux-p3448-0002-b00.dtsi  |  8 +++----
+ 11 files changed, 60 insertions(+), 60 deletions(-)
+
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv2-dual-imx219.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv2-dual-imx219.dtsi
+index 5507de87e605..feced3c51634 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv2-dual-imx219.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv2-dual-imx219.dtsi
+@@ -193,7 +193,7 @@
+ 				* If sensor does not support embedded metadata value should be 0.
+ 				*/
+ 				mode0 { /* IMX219_MODE_3264x2464_21FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -231,7 +231,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode1 { /* IMX219_MODE_3264x1848_28FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -269,7 +269,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode2 { /* IMX219_MODE_1920x1080_30FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -307,7 +307,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode3 { /* IMX219_MODE_1640x1232_30FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -345,7 +345,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode4 { /* IMX219_MODE_1280x720_60FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -383,7 +383,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode5 { /* IMX219_MODE_1280x720_120FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -535,7 +535,7 @@
+ 				* If sensor does not support embedded metadata value should be 0.
+ 				*/
+ 				mode0 { /* IMX219_MODE_3264x2464_21FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_e";
+ 					phy_mode = "DPHY";
+@@ -573,7 +573,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode1 { /* IMX219_MODE_3264x1848_28FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_e";
+ 					phy_mode = "DPHY";
+@@ -611,7 +611,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode2 { /* IMX219_MODE_1920x1080_30FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_e";
+ 					phy_mode = "DPHY";
+@@ -649,7 +649,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode3 { /* IMX219_MODE_1640x1232_30FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_e";
+ 					phy_mode = "DPHY";
+@@ -687,7 +687,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode4 { /* IMX219_MODE_1280x720_60FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_e";
+ 					phy_mode = "DPHY";
+@@ -725,7 +725,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode5 { /* IMX219_MODE_1280x720_120FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_e";
+ 					phy_mode = "DPHY";
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv2-imx219.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv2-imx219.dtsi
+index 273ced051af4..d76721f35254 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv2-imx219.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv2-imx219.dtsi
+@@ -162,7 +162,7 @@
+ 				* If sensor does not support embedded metadata value should be 0.
+ 				*/
+ 				mode0 { /* IMX219_MODE_3264x2464_21FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -204,7 +204,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode1 { /* IMX219_MODE_3264x1848_28FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -246,7 +246,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode2 { /* IMX219_MODE_1920x1080_30FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -288,7 +288,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode3 { /* IMX219_MODE_1640x1232_30FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -330,7 +330,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode4 { /* IMX219_MODE_1280x720_60FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -372,7 +372,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode5 { /* IMX219_MODE_1640x1232_25FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
+index bf880fcaad21..b97f2dc86ac1 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
+@@ -193,7 +193,7 @@
+ 				* If sensor does not support embedded metadata value should be 0.
+ 				*/
+ 				mode0 { /* IMX477_MODE_3840x2160 */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -233,7 +233,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode1 { /* IMX477_MODE_1920X1080 */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -387,7 +387,7 @@
+ 				* If sensor does not support embedded metadata value should be 0.
+ 				*/
+ 				mode0 { /* IMX477_MODE_3840x2160 */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_e";
+ 					phy_mode = "DPHY";
+@@ -427,7 +427,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode1 { /* IMX477_MODE_1920X1080 */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_e";
+ 					phy_mode = "DPHY";
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
+index 4e3f9966bafa..4b3c1d8e21b7 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
+@@ -163,7 +163,7 @@
+ 				* If sensor does not support embedded metadata value should be 0.
+ 				*/
+ 				mode0 { /* IMX477_MODE_3840x2160 */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -203,7 +203,7 @@
+ 					embedded_metadata_height = "2";
+ 				};
+ 				mode1 { /* IMX477_MODE_1920X1080 */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
+index 6d3b8db74a5d..d46ff8b08cfa 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-sunny-imx675.dtsi
+@@ -162,7 +162,7 @@
+ 				* If sensor does not support embedded metadata value should be 0.
+ 				*/
+ 				mode0 { /* IMX675_MODE_2592x1944_25FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+@@ -205,7 +205,7 @@
+ 					embedded_metadata_height = "0";
+ 				};
+ 				mode1 { /* IMX675_MODE_1296x972_25FPS */
+-					mclk_khz = "24000";
++					mclk_khz = "0";
+ 					num_lanes = "2";
+ 					tegra_sinterface = "serial_a";
+ 					phy_mode = "DPHY";
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a00.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a00.dtsi
+index 4bb52044ccec..36b5fad4b77d 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a00.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a00.dtsi
+@@ -115,17 +115,17 @@
+ 
+ 			cam1_mclk_ps0 {
+ 				nvidia,pins = "cam1_mclk_ps0";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+ 			cam2_mclk_ps1 {
+ 				nvidia,pins = "cam2_mclk_ps1";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+@@ -578,8 +578,8 @@
+ 			aud_mclk_pbb0 {
+ 				nvidia,pins = "aud_mclk_pbb0";
+ 				nvidia,function = "rsvd1";
+-				nvidia,pull = <TEGRA_PIN_PULL_UP>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+ 			};
+ 
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a01.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a01.dtsi
+index d12a842b1052..25b6cb39bb0d 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a01.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a01.dtsi
+@@ -115,17 +115,17 @@
+ 
+ 			cam1_mclk_ps0 {
+ 				nvidia,pins = "cam1_mclk_ps0";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+ 			cam2_mclk_ps1 {
+ 				nvidia,pins = "cam2_mclk_ps1";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+@@ -789,7 +789,7 @@
+ 			aud_mclk_pbb0 {
+ 				nvidia,pins = "aud_mclk_pbb0";
+ 				nvidia,function = "rsvd1";
+-				nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
++				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+ 				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a02.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a02.dtsi
+index 58b6d66cd187..a731b953be3c 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a02.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-a02.dtsi
+@@ -115,17 +115,17 @@
+ 
+ 			cam1_mclk_ps0 {
+ 				nvidia,pins = "cam1_mclk_ps0";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+ 			cam2_mclk_ps1 {
+ 				nvidia,pins = "cam2_mclk_ps1";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+@@ -602,9 +602,9 @@
+ 			aud_mclk_pbb0 {
+ 				nvidia,pins = "aud_mclk_pbb0";
+ 				nvidia,function = "rsvd1";
+-				nvidia,pull = <TEGRA_PIN_PULL_UP>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+-				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
++				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
++				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+ 			spi2_mosi_pb4 {
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-b00.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-b00.dtsi
+index 58b6d66cd187..a731b953be3c 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-b00.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0000-b00.dtsi
+@@ -115,17 +115,17 @@
+ 
+ 			cam1_mclk_ps0 {
+ 				nvidia,pins = "cam1_mclk_ps0";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+ 			cam2_mclk_ps1 {
+ 				nvidia,pins = "cam2_mclk_ps1";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+@@ -602,9 +602,9 @@
+ 			aud_mclk_pbb0 {
+ 				nvidia,pins = "aud_mclk_pbb0";
+ 				nvidia,function = "rsvd1";
+-				nvidia,pull = <TEGRA_PIN_PULL_UP>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
+-				nvidia,enable-input = <TEGRA_PIN_ENABLE>;
++				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
++				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+ 			spi2_mosi_pb4 {
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0002-a02.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0002-a02.dtsi
+index 9be96f812cae..2520dbe4e403 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0002-a02.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0002-a02.dtsi
+@@ -115,17 +115,17 @@
+ 
+ 			cam1_mclk_ps0 {
+ 				nvidia,pins = "cam1_mclk_ps0";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+ 			cam2_mclk_ps1 {
+ 				nvidia,pins = "cam2_mclk_ps1";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+@@ -750,7 +750,7 @@
+ 			aud_mclk_pbb0 {
+ 				nvidia,pins = "aud_mclk_pbb0";
+ 				nvidia,function = "rsvd1";
+-				nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
++				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+ 				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+diff --git a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0002-b00.dtsi b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0002-b00.dtsi
+index 9be96f812cae..44bea764fd1a 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0002-b00.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-pinmux-p3448-0002-b00.dtsi
+@@ -115,17 +115,17 @@
+ 
+ 			cam1_mclk_ps0 {
+ 				nvidia,pins = "cam1_mclk_ps0";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+ 			cam2_mclk_ps1 {
+ 				nvidia,pins = "cam2_mclk_ps1";
+-				nvidia,function = "extperiph3";
++				nvidia,function = "rsvd1";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
+-				nvidia,tristate = <TEGRA_PIN_DISABLE>;
++				nvidia,tristate = <TEGRA_PIN_ENABLE>;
+ 				nvidia,enable-input = <TEGRA_PIN_DISABLE>;
+ 			};
+ 
+-- 
+2.52.0
+

@@ -1,0 +1,7 @@
+# Allow user 'gardena' to access /dev/nvhost* and /dev/nvmap devices
+SUBSYSTEM=="50000000.host1x", KERNEL=="nvhost*",             GROUP="gardena", MODE="0660"
+SUBSYSTEM=="nvidia-gpu",      KERNEL=="nvhost*",             GROUP="gardena", MODE="0660"
+SUBSYSTEM=="misc",            KERNEL=="nvmap",               GROUP="gardena", MODE="0660"
+SUBSYSTEM=="misc",            KERNEL=="tegra_camera_ctrl",   GROUP="gardena", MODE="0660"
+SUBSYSTEM=="tty",             KERNEL=="ttyTHS1",             GROUP="gardena", MODE="0660"
+SUBSYSTEM=="tty",             KERNEL=="ttyGS0",              GROUP="gardena", MODE="0660"

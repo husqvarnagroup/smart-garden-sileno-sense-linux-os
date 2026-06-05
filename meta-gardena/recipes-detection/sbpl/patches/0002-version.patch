@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 99723df..9936ab3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -37,6 +37,9 @@ add_library(sbpl SHARED
+ set(SBPL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
+ set(SBPL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+ 
++set_target_properties(sbpl PROPERTIES VERSION ${SBPL_VERSION} SOVERSION ${SBPL_VERSION})
++
++
+ # support for pkg-config
+ set(PKG_NAME "sbpl")
+ set(PKG_DESC "The Search Based Planning Library")

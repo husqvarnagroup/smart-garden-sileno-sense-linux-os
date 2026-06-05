@@ -1,0 +1,48 @@
+From 36695d62bcc8f3b9345c2b8e20dae5a044e85abe Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Wed, 1 Oct 2025 13:08:52 +0200
+Subject: [PATCH] tegra/camera: export symbols needed by imx675
+
+These symbols need to be exported in order to build imx675 as a module.
+
+Signed-off-by: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+---
+ nvidia/drivers/media/platform/tegra/camera/camera_common.c  | 2 ++
+ nvidia/drivers/media/platform/tegra/camera/tegracam_ctrls.c | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/nvidia/drivers/media/platform/tegra/camera/camera_common.c b/nvidia/drivers/media/platform/tegra/camera/camera_common.c
+index ce1f254dd76d..1b6d1eafa770 100644
+--- a/nvidia/drivers/media/platform/tegra/camera/camera_common.c
++++ b/nvidia/drivers/media/platform/tegra/camera/camera_common.c
+@@ -888,6 +888,7 @@ void camera_common_dpd_disable(struct camera_common_data *s_data)
+ 	}
+ 	speculation_barrier(); /* break_spec_p#5_1 */
+ }
++EXPORT_SYMBOL_GPL(camera_common_dpd_disable);
+ 
+ void camera_common_dpd_enable(struct camera_common_data *s_data)
+ {
+@@ -908,6 +909,7 @@ void camera_common_dpd_enable(struct camera_common_data *s_data)
+ 	}
+ 	speculation_barrier(); /* break_spec_p#5_1 */
+ }
++EXPORT_SYMBOL_GPL(camera_common_dpd_enable);
+ 
+ int camera_common_s_power(struct v4l2_subdev *sd, int on)
+ {
+diff --git a/nvidia/drivers/media/platform/tegra/camera/tegracam_ctrls.c b/nvidia/drivers/media/platform/tegra/camera/tegracam_ctrls.c
+index 6009aebb91c7..da58dc62f38a 100644
+--- a/nvidia/drivers/media/platform/tegra/camera/tegracam_ctrls.c
++++ b/nvidia/drivers/media/platform/tegra/camera/tegracam_ctrls.c
+@@ -519,6 +519,7 @@ int tegracam_ctrl_set_overrides(struct tegracam_ctrl_handler *hdl)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(tegracam_ctrl_set_overrides);
+ 
+ int tegracam_init_ctrl_ranges_by_mode(
+ 		struct tegracam_ctrl_handler *handler,
+-- 
+2.52.0
+

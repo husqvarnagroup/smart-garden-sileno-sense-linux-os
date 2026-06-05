@@ -1,0 +1,21 @@
+# Build directories
+/build*/
+
+# Vim
+*.swp
+
+# VS Code
+.vscode/
+
+# Build cache
+bitbake.*/
+
+# Final artifacts
+image-gardena-board-prod.tar.gz
+out/
+
+# Working directory for our scripts
+image-gardena-board-prod/
+
+# We use Python tooling
+.venv/

@@ -1,0 +1,70 @@
+From a8e633598c6b1769f2200b0ff02f00a9fd5a0410 Mon Sep 17 00:00:00 2001
+From: invalid_git config <unknown@unknown>
+Date: Fri, 8 Aug 2025 08:50:47 +0000
+Subject: [PATCH] Disable DP and HDMI
+
+These are not used and cause some problems
+with EMC.
+---
+ .../kernel-dts/tegra210-porg-p3448-common.dtsi   | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi b/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
+index bf4875be6fd9..2dc794c8b56a 100644
+--- a/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
++++ b/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
+@@ -107,7 +107,7 @@
+ 
+ 		/* tegradc.0 */
+ 		dc@54200000 {
+-			status = "okay";
++			status = "disabled";
+ 			nvidia,dc-flags = <TEGRA_DC_FLAG_ENABLED>;
+ 			nvidia,emc-clk-rate = <300000000>;
+ 			nvidia,cmu-enable = <1>;
+@@ -118,7 +118,7 @@
+ 			win-mask = <0x7>; /* Assign only wins A/B/C */
+ 		};
+ 		dc@54240000 {
+-			status = "okay";
++			status = "disabled";
+ 			nvidia,dc-flags = <TEGRA_DC_FLAG_ENABLED>;
+ 			nvidia,emc-clk-rate = <300000000>;
+ 			nvidia,cmu-enable = <1>;
+@@ -129,10 +129,10 @@
+ 			win-mask = <0x7>; /* Assign only wins A/B/C */
+ 		};
+ 		sor {
+-			status = "okay";
++			status = "disabled";
+ 			nvidia,xbar-ctrl = <2 1 0 3 4>;
+ 			dp-display {
+-				status = "okay";
++				status = "disabled";
+ 			};
+ 		};
+ 		sor1 {
+@@ -142,16 +142,16 @@
+ 			 * SOR1 and the pad.
+ 			 */
+ 			nvidia,xbar-ctrl = <0 1 2 3 4>;
+-			status = "okay";
++			status = "disabled";
+ 			hdmi-display {
+-				status = "okay";
++				status = "disabled";
+ 			};
+ 		};
+ 		dpaux {
+-			status = "okay";
++			status = "disabled";
+ 		};
+ 		dpaux1 {
+-			status = "okay";
++			status = "disabled";
+ 		};
+ 	};
+ 
+-- 
+2.52.0
+

@@ -1,0 +1,44 @@
+--- ./include/v4l2_nv_extensions.h	2021-11-04 12:35:30.000000000 +0100
++++ ./include/v4l2_nv_extensions.h	2021-11-04 17:05:13.060348003 +0100
+@@ -176,7 +176,7 @@
+ #define V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY           0x10
+ #define V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD      0x20
+ #define V4L2_H264_SPS_FLAG_DIRECT_8X8_INFERENCE         0x40
+-struct v4l2_ctrl_h264_sps {
++struct v4l2_ctrl_h264_sps_ {
+     __u8 profile_idc;
+     __u8 constraint_set_flags;
+     __u8 level_idc;
+@@ -205,7 +205,7 @@
+ #define V4L2_H264_PPS_FLAG_REDUNDANT_PIC_CNT_PRESENT            0x0020
+ #define V4L2_H264_PPS_FLAG_TRANSFORM_8X8_MODE               0x0040
+ #define V4L2_H264_PPS_FLAG_PIC_SCALING_MATRIX_PRESENT           0x0080
+-struct v4l2_ctrl_h264_pps {
++struct v4l2_ctrl_h264_pps_ {
+     __u8 pic_parameter_set_id;
+     __u8 seq_parameter_set_id;
+     __u8 num_slice_groups_minus1;
+@@ -219,12 +219,12 @@
+     __u8 flags;
+ };
+ 
+-struct v4l2_ctrl_h264_scaling_matrix {
++struct v4l2_ctrl_h264_scaling_matrix_ {
+     __u8 scaling_list_4x4[6][16];
+     __u8 scaling_list_8x8[6][64];
+ };
+ 
+-struct v4l2_h264_weight_factors {
++struct v4l2_h264_weight_factors_ {
+     __s8 luma_weight[32];
+     __s8 luma_offset[32];
+     __s8 chroma_weight[32][2];
+@@ -287,7 +287,7 @@
+ If not set, this entry is unused for reference. */
+ #define V4L2_H264_DPB_ENTRY_FLAG_ACTIVE     0x01
+ #define V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM  0x02
+-struct v4l2_h264_dpb_entry {
++struct v4l2_h264_dpb_entry_ {
+     __u32 buf_index; /**< v4l2_buffer index. */
+     __u16 frame_num;
+     __u16 pic_num;

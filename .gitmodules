@@ -1,0 +1,21 @@
+[submodule "bitbake"]
+	path = bitbake
+	url = ../bitbake.git
+[submodule "openembedded-core"]
+	path = openembedded-core
+	url = ../openembedded-core.git
+[submodule "meta-openembedded"]
+	path = meta-openembedded
+	url = ../meta-openembedded.git
+[submodule "meta-tegra"]
+	path = meta-tegra
+	url = ../meta-tegra.git
+[submodule "meta-clang"]
+	path = meta-clang
+	url = ../meta-clang.git
+[submodule "meta-ptx"]
+	path = meta-ptx
+	url = ../meta-ptx.git
+[submodule "meta-swupdate"]
+	path = meta-swupdate
+	url = ../meta-swupdate.git

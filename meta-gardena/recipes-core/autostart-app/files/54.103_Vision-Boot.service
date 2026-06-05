@@ -1,0 +1,19 @@
+[Unit]
+Description=Run boot if main app fails
+After=multi-user.target
+
+[Service]
+Type=simple
+User=gardena
+Group=gardena
+WorkingDirectory=/home/gardena/54.103_Vision-Boot
+ExecStart=/home/gardena/54.103_Vision-Boot/54.103_Vision-Boot.bin
+EnvironmentFile=-/home/gardena/54.103_Vision-Boot/_FSMower/54.3_Vision-App.env
+Restart=always
+RestartSec=3
+# Add CAP_SYS_TIME capability to the service so it can use settimeofday syscall
+# This extends the priviliges that user app has but only to CAP_SYS_TIME
+AmbientCapabilities=CAP_SYS_TIME
+
+[Install]
+WantedBy=multi-user.target

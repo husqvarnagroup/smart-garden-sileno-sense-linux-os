@@ -1,0 +1,12 @@
+[Unit]
+Description=WPA supplicant for %i
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/start-wifi.sh %i
+ExecReload=/usr/bin/killall -HUP wpa_supplicant
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

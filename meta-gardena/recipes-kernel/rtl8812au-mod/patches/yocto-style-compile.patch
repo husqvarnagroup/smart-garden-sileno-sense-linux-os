@@ -1,0 +1,41 @@
+From 9391cfc7ae53021aadc6b4461b1b3e009168adb2 Mon Sep 17 00:00:00 2001
+From: Tom Deblauwe <tom@toadi.com>
+Date: Thu, 30 Jan 2020 14:45:36 +0100
+Subject: [PATCH] yocto compile commands
+
+---
+ Makefile | 25 +++++--------------------
+ 1 file changed, 5 insertions(+), 20 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f7ed71a..9689425 100755
+--- a/Makefile
++++ b/Makefile
+@@ -2237,18 +2237,18 @@ obj-$(CONFIG_88XXAU) := $(MODULE_NAME).o
+ 
+ else
+ 
+ export CONFIG_88XXAU = m
+ 
+-all: modules
+-
+-modules:
+-	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
+-	@echo "---------------------------------------------------------------------------"
+-	@echo "Visit https://github.com/aircrack-ng/rtl8812au for support/reporting issues"
+-	@echo "or check for newer versions (branches) of these drivers.                   "
+-	@echo "---------------------------------------------------------------------------"
++SRC := $(shell pwd)
++
++all:
++	$(MAKE) -C $(KERNEL_SRC) M=$(SRC)
++
++modules_install:
++	$(MAKE) -C $(KERNEL_SRC) M=$(SRC) modules_install
++
+ strip:
+ 	$(CROSS_COMPILE)strip $(MODULE_NAME).ko --strip-unneeded
+ 
+ install:
+ 	install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)
+

@@ -1,0 +1,95 @@
+diff --git a/src/Vocabulary.cpp b/src/Vocabulary.cpp
+index 4189dfd..3b7de31 100644
+--- a/src/Vocabulary.cpp
++++ b/src/Vocabulary.cpp
+@@ -140,8 +140,9 @@ Vocabulary::operator=
+ 
+ 
+ void Vocabulary::create(
+-  const std::vector< cv::Mat > &training_features)
++  const std::vector< cv::Mat > &training_features, int num_iterations)
+ {
++    nIterations = num_iterations;
+     std::vector<std::vector<cv::Mat> > vtf(training_features.size());
+     for(size_t i=0;i<training_features.size();i++){
+         vtf[i].resize(training_features[i].rows);
+@@ -152,6 +153,12 @@ void Vocabulary::create(
+ 
+ }
+ 
++void Vocabulary::create
++    (const  std::vector<cv::Mat>   &training_features)
++{
++    create(training_features, 500);
++}
++
+ void Vocabulary::create(
+   const std::vector<std::vector<cv::Mat> > &training_features)
+ {
+@@ -264,6 +271,7 @@ void Vocabulary::HKmeansStep(NodeId parent_id,
+         // to check if clusters move after iterations
+         std::vector<int> last_association, current_association;
+ 
++        auto niter = 0;
+         while(goon)
+         {
+             // 1. Calculate clusters
+@@ -325,6 +333,8 @@ void Vocabulary::HKmeansStep(NodeId parent_id,
+ 
+             // kmeans++ ensures all the clusters has any feature associated with them
+ 
++            niter++;
++
+             // 3. check convergence
+             if(first_time)
+             {
+@@ -342,6 +352,10 @@ void Vocabulary::HKmeansStep(NodeId parent_id,
+                         break;
+                     }
+                 }
++
++                if (niter > nIterations) {
++                    goon = false;
++                }
+             }
+ 
+             if(goon)
+diff --git a/src/Vocabulary.h b/src/Vocabulary.h
+index c5113b6..8b38411 100644
+--- a/src/Vocabulary.h
++++ b/src/Vocabulary.h
+@@ -86,15 +86,24 @@ public:
+    */
+   virtual void create
+     (const std::vector<std::vector<cv::Mat> > &training_features);
++
+   /**
+    * Creates a vocabulary from the training features with the already
+    * defined parameters
+    * @param training_features. Each row of a matrix is a feature
++   * @param num_iterations The maximum number of iterations to run for the hierarchical k-means clustering algorithm
+    */
+    virtual void create
+-    (const  std::vector<cv::Mat>   &training_features);
++    (const  std::vector<cv::Mat>   &training_features, int num_iterations);
+ 
+   /**
++   * Creates a vocabulary from the training features with the already, defined parameters, using a maximum of 500 iterations
++   */
++    virtual void create
++        (const  std::vector<cv::Mat>   &training_features);
++
++
++    /**
+    * Creates a vocabulary from the training features, setting the branching
+    * factor and the depth levels of the tree
+    * @param training_features
+@@ -439,6 +448,8 @@ protected:
+ 
+ protected:
+ 
++  int nIterations = 500;
++
+   /// Branching factor
+   int m_k;
+   

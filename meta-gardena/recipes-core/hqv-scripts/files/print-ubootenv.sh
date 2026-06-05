@@ -1,0 +1,1 @@
+sudo fw_printenv

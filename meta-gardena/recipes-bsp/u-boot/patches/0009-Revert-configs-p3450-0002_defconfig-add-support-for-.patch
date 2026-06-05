@@ -1,0 +1,32 @@
+From b36239ebe8536dacca81530312c140995a34de1c Mon Sep 17 00:00:00 2001
+From: Erik Stromdahl <erik.a.stromdahl@husqvarnagroup.com>
+Date: Mon, 10 Nov 2025 10:46:29 +0100
+Subject: [PATCH] Revert "configs/p3450-0002_defconfig: add support for FIT
+ images"
+
+This reverts commit 7a1c5cf2be01d113be70a5d01be89caf18739019.
+---
+ configs/p3450-0002_defconfig | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/configs/p3450-0002_defconfig b/configs/p3450-0002_defconfig
+index f84f794c0c..70c9f7e478 100644
+--- a/configs/p3450-0002_defconfig
++++ b/configs/p3450-0002_defconfig
+@@ -10,7 +10,6 @@ CONFIG_TEGRA210=y
+ CONFIG_TARGET_P3450_0000=y
+ CONFIG_P3450_EMMC=y
+ CONFIG_SYS_LOAD_ADDR=0x84000000
+-CONFIG_FIT=y
+ CONFIG_OF_BOARD_SETUP=y
+ CONFIG_OF_SYSTEM_SETUP=y
+ CONFIG_BOOTCOMMAND="sysboot mmc 0:1 any 0x90000000 /boot/extlinux/extlinux.conf"
+@@ -69,5 +68,4 @@ CONFIG_USB_GADGET_VENDOR_NUM=0x0955
+ CONFIG_USB_GADGET_PRODUCT_NUM=0x701a
+ CONFIG_CI_UDC=y
+ CONFIG_USB_GADGET_DOWNLOAD=y
+-# CONFIG_SHA256 is not set
+ CONFIG_OF_LIBFDT_OVERLAY=y
+-- 
+2.43.0
+
