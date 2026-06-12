@@ -23,21 +23,34 @@ Source code packages for all distributed versions can be found [here](https://op
 
 * The Yocto build host packages need [to be installed](https://docs.yoctoproject.org/dev/ref-manual/system-requirements.html?highlight=build%20host%20package#required-packages-for-the-build-host)
 
-## Build Instructions
+## Installing a Custom OS
+
+## Building the Images
 
 ```
-./bbwrapper.sh image-gardena
-./bbwrapper.sh image-gardena-top-layer
-./bbwrapper.sh image-gardena-bottom-layer
-```
+# TBD: Install deps
 
-TBD:
-- How to build a flashable image
+./build.sh
+```
 
 ## Installing
 
 Please be aware that any modification to your mower may permanently brick your
 device and is not covered by warranty!
 
-TBD:
-- How to flash the image generated above
+### Forcing Recovery Mode
+
+TBD
+
+### Backing up the Flash
+
+```
+sudo build/tmp/work-shared/L4T-tegra210-32.7.5-r0/Linux_for_Tegra/flash.sh -r -k APP -G backup.img jetson-nano-emmc mmcblk0p1  # FIXME
+```
+
+### Flashing
+
+```
+cd out
+sudo PYTHONDONTWRITEBYTECODE=1 ./doflash.sh
+```
