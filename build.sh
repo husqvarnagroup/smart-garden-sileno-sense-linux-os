@@ -3,7 +3,7 @@ set -e
 
 OUT_DIR="$(dirname $(readlink -f "$0"))/out"
 IMG_DIR=build/tmp/deploy/images/gardena-jetson-nano
-TEGRA_ARCHIVE=$IMG_DIR/image-gardena-top-layer-gardena-jetson-nano.tegraflash.tar.gz
+TEGRA_ARCHIVE=$IMG_DIR/image-gardena-top-layer-dev-gardena-jetson-nano.tegraflash.tar.gz
 ROOTFS_BOTTOM=$IMG_DIR/image-gardena-bottom-layer.squashfs
 
 create_rootfs_imgs () {
@@ -14,7 +14,7 @@ create_rootfs_imgs () {
 
     echo "echo Creating top layer: image-gardena-top-layer.squashfs" >> "$FAKEROOT_SCRIPT"
     echo "mkdir rootfs" >> "$FAKEROOT_SCRIPT"
-    echo "tar xf image-gardena-top-layer.tar -C rootfs" >> "$FAKEROOT_SCRIPT"
+    echo "tar xf image-gardena-top-layer-dev.tar -C rootfs" >> "$FAKEROOT_SCRIPT"
     echo "mksquashfs rootfs image-gardena-top-layer.squashfs -noappend -comp gzip" >> "$FAKEROOT_SCRIPT"
 
     echo "echo Creating ext4 overlay: overlay.ext4" >> "$FAKEROOT_SCRIPT"
@@ -65,7 +65,7 @@ rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
 
 ./bbwrapper.sh image-gardena-bottom-layer
-./bbwrapper.sh image-gardena-top-layer
+./bbwrapper.sh image-gardena-top-layer-dev
 
 if [ ! -f $TEGRA_ARCHIVE ]; then
     echo "Input archive not found: $IN_TARBALL"
@@ -82,7 +82,7 @@ cp $ROOTFS_BOTTOM $OUT_DIR
 
 cd $OUT_DIR
 
-sed -i "s/image-gardena-top-layer.tar/image-gardena-top-layer.squashfs image-gardena-bottom-layer.squashfs/" doflash.sh
+sed -i "s/image-gardena-top-layer-dev.tar/image-gardena-top-layer.squashfs image-gardena-bottom-layer.squashfs/" doflash.sh
 
 create_rootfs_imgs
 create_uboot_img
