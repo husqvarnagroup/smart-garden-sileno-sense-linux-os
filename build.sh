@@ -4,7 +4,7 @@ set -e
 OUT_DIR="$(dirname $(readlink -f "$0"))/out"
 IMG_DIR=build/tmp/deploy/images/gardena-jetson-nano
 TEGRA_ARCHIVE=$IMG_DIR/image-gardena-top-layer-gardena-jetson-nano.tegraflash.tar.gz
-ROOTFS_BOTTOM=$IMG_DIR/image-gardena-bottom-layer.squashfs
+ROOTFS_BOTTOM=$IMG_DIR/image-gardena-bottom-layer-gardena-jetson-nano.squashfs
 
 create_rootfs_imgs () {
     FAKEROOT_SCRIPT=fakeroot-script.sh
