@@ -45,7 +45,8 @@ TBD
 ### Backing up the Flash
 
 ```
-sudo build/tmp/work-shared/L4T-tegra210-32.7.5-r0/Linux_for_Tegra/flash.sh -r -k APP -G backup.img jetson-nano-emmc mmcblk0p1  # FIXME
+cd build/tmp/work-shared/L4T-tegra210-32.7.5-r0/Linux_for_Tegra
+sudo ./flash.sh -r -k APP -G backup.img jetson-nano-emmc mmcblk0p1 # FIXME
 ```
 
 ### Flashing
