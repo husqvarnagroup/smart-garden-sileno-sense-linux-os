@@ -89,4 +89,4 @@ create_uboot_img
 
 cd -
 
-echo "Build successfully"
+echo "Build done"
