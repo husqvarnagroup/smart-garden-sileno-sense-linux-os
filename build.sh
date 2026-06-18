@@ -88,3 +88,5 @@ create_rootfs_imgs
 create_uboot_img
 
 cd -
+
+echo "Build successfully"
